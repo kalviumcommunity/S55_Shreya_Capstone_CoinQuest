@@ -31,7 +31,7 @@ The main goal of this project is to provide users with a user-friendly and effic
 
 ### Project Team
 
-- **Shreya**: Project Lead and Developer
+- **Shreya**: Project Lead and Developer 
 
 #### Repository Link - https://github.com/kalviumcommunity/S55_Shreya_Capstone_CoinQuest
 
@@ -40,6 +40,6 @@ The main goal of this project is to provide users with a user-friendly and effic
 ### Feedback and Contributions
 
 Feedback and contributions are welcome! If you have any suggestions or would like to contribute to the project, please feel free to reach out to Shreya.
-Email I'd - shreyaspawar655@gmail.com
 
 Thank You !
+
