@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import logo from '../assets/logo_coint'
 const Home = () => {
     return (
         <div>
             <nav className="navbar">
                 <div className="logo">
                     <Link to="/">
-                        <img src="./src/assets/logo_coint.png" alt="Your Logo" />
+                        <img src={logo} alt="Your Logo" />
                     </Link>
                 </div>
 
