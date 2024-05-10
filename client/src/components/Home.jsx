@@ -1,8 +1,8 @@
-import React from 'react';
+// import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../assets/logo_coint';
-import background from '../assets/HomeBg';
-import aboutUsBg from '../assets/AboutUsBg';
+import logo from '../assets/logo_coint.png'; 
+import background from '../assets/HomeBg.jpg'; 
+import aboutUsBg from '../assets/AboutUsBg.jpg';
 const Home = () => {
     return (
         <div>
