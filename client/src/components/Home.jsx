@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../assets/logo_coint'
+import logo from '../assets/logo_coint';
+import background from '../assets/HomeBg';
+import aboutUsBg from '../assets/AboutUsBg';
 const Home = () => {
     return (
         <div>
@@ -19,12 +21,12 @@ const Home = () => {
 
             
             <div className="background-image">
-                <img src="./src/assets/HomeBg.jpg" alt="" />
+                <img src={background} alt="" />
             </div>
 
             <div id="about" className="about-section">
                 <div className="about-background-image">                
-                    <img src="./src/assets/AboutUsBg.jpg" alt="" />
+                    <img src={aboutUsBg} alt="" />
                         <div>
                             <h1>Welcome to CoinQuest!</h1>
                             <h2>Our Story</h2>
