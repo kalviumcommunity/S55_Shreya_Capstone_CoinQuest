@@ -6,6 +6,6 @@ const CategorySchema = new mongoose.Schema({
     price: Number,
 });
 
-const Category = mongoose.model('Category', CategorySchema);
+const Category = mongoose.model('coinquest-collections', CategorySchema);
 
 module.exports = Category;
