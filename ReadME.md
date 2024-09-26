@@ -37,6 +37,8 @@ The main goal of this project is to provide users with a user-friendly and effic
 
 #### Deployed Link - https://coinquest-ciz86ormz-shreyas-projects-7402f9ed.vercel.app/
 
+#### Deployed-backend link - https://s55-shreya-capstone-coinquest.onrender.com
+
 ### Feedback and Contributions
 
 Feedback and contributions are welcome! If you have any suggestions or would like to contribute to the project, please feel free to reach out to Shreya.
