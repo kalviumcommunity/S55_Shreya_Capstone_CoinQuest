@@ -124,4 +124,56 @@ router.get('/categories', authenticate, async (req, res) => {
     }
 });
 
+// Update a category
+router.put('/categories/:id', authenticate, async (req, res) => {
+    const { id } = req.params;
+    const { newCategory } = req.body;
+
+    if (!newCategory) {
+        return res.status(400).json({ error: 'New category name is required' });
+    }
+
+    try {
+        const category = await Category.findOneAndUpdate(
+            { _id: id, user: req.user.id },
+            { name: newCategory },
+            { new: true } // Return the updated document
+        );
+
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+
+        res.status(200).json({ message: 'Category updated successfully', category });
+    } catch (err) {
+        res.status(500).json({ error: 'Error updating category', details: err });
+    }
+});
+
+// Update a budget
+router.put('/budgets/:id', authenticate, async (req, res) => {
+    const { id } = req.params;
+    const { amount } = req.body;
+
+    if (amount === undefined) {
+        return res.status(400).json({ error: 'Amount is required' });
+    }
+
+    try {
+        const budget = await Budget.findOneAndUpdate(
+            { _id: id, user: req.user.id },
+            { amount },
+            { new: true } // Return the updated document
+        );
+
+        if (!budget) {
+            return res.status(404).json({ error: 'Budget not found' });
+        }
+
+        res.status(200).json({ message: 'Budget updated successfully', budget });
+    } catch (err) {
+        res.status(500).json({ error: 'Error updating budget', details: err });
+    }
+});
+
 module.exports = router;

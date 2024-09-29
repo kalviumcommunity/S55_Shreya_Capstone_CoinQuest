@@ -18,32 +18,32 @@ const secretKey = process.env.SECRET_KEY;
 console.log(process.env.MONGO);
 
 const startConnect = async () => {
-  console.log(process.env.MONGO)
-  try {
-    await mongoose.connect(process.env.MONGO);
-    status = "connected"; 
-    console.log("Connected to MongoDB");
-  } catch (err) {
-    console.error("Failed to connect to MongoDB:", err); 
-    status = "error";
-  }
+    console.log(process.env.MONGO);
+    try {
+        await mongoose.connect(process.env.MONGO);
+        status = "connected"; 
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.error("Failed to connect to MongoDB:", err); 
+        status = "error";
+    }
 };
 
 const stopConnect = async () => {
-  await mongoose.disconnect();
-  status = "disconnected"; 
-  console.log("Disconnected from MongoDB");
+    await mongoose.disconnect();
+    status = "disconnected"; 
+    console.log("Disconnected from MongoDB");
 };
 
 app.use(router);
 
 app.get('/', (req, res) => {
-  res.send(status);
+    res.send(status);
 });
 
 startConnect(); 
 app.listen(PORT, async () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;
