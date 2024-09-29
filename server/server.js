@@ -15,6 +15,22 @@ const secretKey = process.env.SECRET_KEY;
 console.log(`MONGO: ${process.env.MONGO}`);
 
 const startConnect = async () => {
+    console.log(process.env.MONGO);
+    try {
+        await mongoose.connect(process.env.MONGO);
+        status = "connected"; 
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.error("Failed to connect to MongoDB:", err); 
+        status = "error";
+    }
+};
+
+const stopConnect = async () => {
+    await mongoose.disconnect();
+    status = "disconnected"; 
+    console.log("Disconnected from MongoDB");
+
   try {
     await mongoose.connect(process.env.MONGO, {
       useNewUrlParser: true,
@@ -45,10 +61,12 @@ app.use(express.json());
 app.use(routes);
 
 app.get('/', (req, res) => {
-  res.send(status);
+    res.send(status);
 });
 
 startConnect(); 
+app.listen(PORT, async () => {
+    console.log(`Server is running on port ${PORT}`);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
