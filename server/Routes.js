@@ -3,11 +3,10 @@ const router = express.Router();
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('./User');  // User schema
-const Category = require('./Category');  // Category schema
-const Budget = require('./Budget');  // Budget schema
+const User = require('./User');  
+const Category = require('./Category');  
+const Budget = require('./Budget'); 
 
-// Register a new user
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
@@ -25,7 +24,6 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Login user and return JWT
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -51,7 +49,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Middleware to protect routes
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
@@ -78,7 +75,7 @@ router.post('/categories', authenticate, async (req, res) => {
     try {
         const category = new Category({
             name: newCategory,
-            user: req.user.id  // User who is adding the category
+            user: req.user.id 
         });
         await category.save();
         res.status(201).json({ message: 'Category added successfully', category });
@@ -87,7 +84,6 @@ router.post('/categories', authenticate, async (req, res) => {
     }
 });
 
-// Assign budget to a category
 router.post('/assign-amount', authenticate, async (req, res) => {
     const { category, amount, month } = req.body;
 
@@ -115,7 +111,6 @@ router.post('/assign-amount', authenticate, async (req, res) => {
     }
 });
 
-// Get all categories
 router.get('/categories', authenticate, async (req, res) => {
     try {
         const categories = await Category.find({ user: req.user.id });
@@ -125,7 +120,6 @@ router.get('/categories', authenticate, async (req, res) => {
     }
 });
 
-// Update a category
 router.put('/categories/:id', authenticate, async (req, res) => {
     const { id } = req.params;
     const { newCategory } = req.body;
@@ -138,7 +132,7 @@ router.put('/categories/:id', authenticate, async (req, res) => {
         const category = await Category.findOneAndUpdate(
             { _id: id, user: req.user.id },
             { name: newCategory },
-            { new: true } // Return the updated document
+            { new: true } 
         );
 
         if (!category) {
@@ -151,7 +145,6 @@ router.put('/categories/:id', authenticate, async (req, res) => {
     }
 });
 
-// Update a budget
 router.put('/budgets/:id', authenticate, async (req, res) => {
     const { id } = req.params;
     const { amount } = req.body;
@@ -164,7 +157,7 @@ router.put('/budgets/:id', authenticate, async (req, res) => {
         const budget = await Budget.findOneAndUpdate(
             { _id: id, user: req.user.id },
             { amount },
-            { new: true } // Return the updated document
+            { new: true } 
         );
 
         if (!budget) {
