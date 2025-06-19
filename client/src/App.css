@@ -190,4 +190,63 @@ html {
 
 .about-card a:hover {
   text-decoration: underline;
+
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar styles */
+.navbar {
+    width: 100%;
+    height: 70px;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    padding: 0 20px;
+}
+
+.logo img {
+    height: 50px;
+}
+
+.nav-buttons a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+/* Main content styles */
+.main-content {
+    padding-top: 70px; /* Adjust according to your navbar height */
+}
+
+/* Background section styles */
+.background-section {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.background-section .content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        height: 50px;
+    }
 }

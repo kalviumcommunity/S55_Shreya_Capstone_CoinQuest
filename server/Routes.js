@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./User');
@@ -151,6 +152,21 @@ router.put('/budgets/:id', authenticate, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Error updating budget', details: err });
   }
+        res.status(200).json({ message: 'Budget updated successfully', budget });
+    } catch (err) {
+        res.status(500).json({ error: 'Error updating budget', details: err });
+
+const Category = require('./CategorySchema'); // Adjust the path as necessary
+
+// Get all categories
+router.get('/data', async (req, res) => {
+    try {
+        const categories = await Category.find().maxTimeMS(20000).exec();
+        res.json(categories);
+    } catch (err) {
+        console.error('Error in GET categories request:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 module.exports = router;
