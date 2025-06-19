@@ -1,0 +1,14 @@
+# Ignore node modules globally
+node_modules
+
+# Ignore Vite/React build stuff
+dist
+.vite
+*.local
+
+# System junk
+.DS_Store
+
+# IDE/editor junk
+.vscode/
+.idea/
