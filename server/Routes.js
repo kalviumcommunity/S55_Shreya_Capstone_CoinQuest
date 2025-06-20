@@ -1,16 +1,14 @@
 const express = require('express');
 const router = express.Router();
-
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./User');
 const Category = require('./Category');
 const Budget = require('./Budget');
 
-// 🔐 Register Route
+// 🔐 Register
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
-
   if (!username || !password)
     return res.status(400).json({ error: 'Username and password are required' });
 
@@ -24,7 +22,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// 🛂 Login Route with Debug Logs
+// 🛂 Login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   console.log('Login request received for:', username);
@@ -51,7 +49,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// 🔒 Auth Middleware
+// 🔒 Middleware
 const authenticate = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: 'Access denied, token missing' });
@@ -152,21 +150,6 @@ router.put('/budgets/:id', authenticate, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Error updating budget', details: err });
   }
-        res.status(200).json({ message: 'Budget updated successfully', budget });
-    } catch (err) {
-        res.status(500).json({ error: 'Error updating budget', details: err });
-
-const Category = require('./CategorySchema'); // Adjust the path as necessary
-
-// Get all categories
-router.get('/data', async (req, res) => {
-    try {
-        const categories = await Category.find().maxTimeMS(20000).exec();
-        res.json(categories);
-    } catch (err) {
-        console.error('Error in GET categories request:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
 });
 
 module.exports = router;
