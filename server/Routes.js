@@ -1,154 +1,117 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('./User');
-const Category = require('./Category');
-const Budget = require('./Budget');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-// 🔐 Register
-router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password)
-    return res.status(400).json({ error: 'Username and password are required' });
+const User = require("./User");
+const Category = require("./Category");
+const Entry = require("./Entry");
+const Budget = require("./Budget");
 
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, password: hashedPassword });
-    await user.save();
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (err) {
-    res.status(500).json({ error: 'Error registering user', details: err });
-  }
-});
+const SECRET_KEY = process.env.SECRET_KEY;
 
-// 🛂 Login
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  console.log('Login request received for:', username);
+// Middleware to verify JWT
+const verifyToken = (req, res, next) => {
+  const token = req.headers["authorization"];
+  if (!token) return res.status(403).json({ message: "Token required" });
 
-  if (!username || !password)
-    return res.status(400).json({ error: 'Username and password are required' });
-
-  try {
-    const user = await User.findOne({ username });
-    console.log('User found:', user);
-
-    if (!user) return res.status(401).json({ error: 'Invalid username or password' });
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    console.log('Password match:', passwordMatch);
-
-    if (!passwordMatch) return res.status(401).json({ error: 'Invalid username or password' });
-
-    const token = jwt.sign({ id: user._id, username: user.username }, process.env.SECRET_KEY);
-    res.status(200).json({ message: 'Login successful', token });
-  } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ error: 'Error logging in', details: err.message });
-  }
-});
-
-// 🔒 Middleware
-const authenticate = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'Access denied, token missing' });
-
-  try {
-    req.user = jwt.verify(token, process.env.SECRET_KEY);
+  jwt.verify(token.split(" ")[1], SECRET_KEY, (err, decoded) => {
+    if (err) return res.status(403).json({ message: "Invalid token" });
+    req.userId = decoded.id;
     next();
-  } catch (err) {
-    res.status(401).json({ error: 'Invalid token' });
-  }
+  });
 };
 
-// 📁 Add Category
-router.post('/categories', authenticate, async (req, res) => {
-  const { newCategory } = req.body;
-
-  if (!newCategory) return res.status(400).json({ error: 'Category name is required' });
-
+// Register with name and password only
+router.post("/register", async (req, res) => {
+  const { name, password } = req.body;
   try {
-    const category = new Category({ name: newCategory, user: req.user.id });
-    await category.save();
-    res.status(201).json({ message: 'Category added successfully', category });
+    const hashed = await bcrypt.hash(password, 10);
+    const user = new User({ name, password: hashed });
+    await user.save();
+    res.status(201).json({ message: "Registered successfully" });
   } catch (err) {
-    res.status(500).json({ error: 'Error adding category', details: err });
+    res.status(400).json({ error: "User already exists or invalid data" });
   }
 });
 
-// 💰 Assign Budget
-router.post('/assign-amount', authenticate, async (req, res) => {
-  const { category, amount, month } = req.body;
-
-  if (!category || !amount || !month)
-    return res.status(400).json({ error: 'Category, amount, and month are required' });
-
+// Login with name and password only
+router.post("/login", async (req, res) => {
+  const { name, password } = req.body;
   try {
-    const categoryDoc = await Category.findOne({ name: category, user: req.user.id });
-    if (!categoryDoc) return res.status(404).json({ error: 'Category not found' });
+    const user = await User.findOne({ name });
+    if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
-    const budget = new Budget({ category: categoryDoc._id, amount, month, user: req.user.id });
-    await budget.save();
-    res.status(201).json({ message: 'Budget assigned successfully', budget });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(400).json({ error: "Invalid credentials" });
+
+    const token = jwt.sign({ id: user._id }, SECRET_KEY);
+    res.json({ token });
   } catch (err) {
-    res.status(500).json({ error: 'Error assigning budget', details: err });
+    res.status(500).json({ error: "Login error" });
   }
 });
 
-// 📋 Get All Categories
-router.get('/categories', authenticate, async (req, res) => {
+// Get categories
+router.get("/categories", verifyToken, async (req, res) => {
   try {
-    const categories = await Category.find({ user: req.user.id });
-    res.status(200).json(categories);
+    const categories = await Category.find({ user: req.userId });
+    res.json(categories);
   } catch (err) {
-    res.status(500).json({ error: 'Error fetching categories', details: err });
+    res.status(500).json({ error: "Failed to fetch categories" });
   }
 });
 
-// 📝 Update Category
-router.put('/categories/:id', authenticate, async (req, res) => {
-  const { id } = req.params;
-  const { newCategory } = req.body;
-
-  if (!newCategory)
-    return res.status(400).json({ error: 'New category name is required' });
-
+// Add entry
+router.post("/entries", verifyToken, async (req, res) => {
+  const { title, amount, categoryId, date } = req.body;
   try {
-    const category = await Category.findOneAndUpdate(
-      { _id: id, user: req.user.id },
-      { name: newCategory },
-      { new: true }
-    );
-
-    if (!category) return res.status(404).json({ error: 'Category not found' });
-
-    res.status(200).json({ message: 'Category updated successfully', category });
+    const entry = new Entry({
+      user: req.userId,
+      title,
+      amount,
+      category: categoryId,
+      date: date || new Date(),
+    });
+    await entry.save();
+    res.status(201).json(entry);
   } catch (err) {
-    res.status(500).json({ error: 'Error updating category', details: err });
+    res.status(500).json({ error: "Failed to add entry" });
   }
 });
 
-// 💸 Update Budget
-router.put('/budgets/:id', authenticate, async (req, res) => {
-  const { id } = req.params;
-  const { amount } = req.body;
-
-  if (amount === undefined)
-    return res.status(400).json({ error: 'Amount is required' });
-
+// Get entries
+router.get("/entries", verifyToken, async (req, res) => {
   try {
-    const budget = await Budget.findOneAndUpdate(
-      { _id: id, user: req.user.id },
+    const entries = await Entry.find({ user: req.userId });
+    res.json(entries);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch entries" });
+  }
+});
+
+// Set or update budget
+router.post("/budgets", verifyToken, async (req, res) => {
+  const { categoryId, month, year, amount } = req.body;
+  try {
+    const existing = await Budget.findOneAndUpdate(
+      { user: req.userId, category: categoryId, month, year },
       { amount },
-      { new: true }
+      { new: true, upsert: true }
     );
-
-    if (!budget) return res.status(404).json({ error: 'Budget not found' });
-
-    res.status(200).json({ message: 'Budget updated successfully', budget });
+    res.status(201).json(existing);
   } catch (err) {
-    res.status(500).json({ error: 'Error updating budget', details: err });
+    res.status(500).json({ error: "Failed to set budget" });
+  }
+});
+
+// Get budgets
+router.get("/budgets", verifyToken, async (req, res) => {
+  try {
+    const budgets = await Budget.find({ user: req.userId });
+    res.json(budgets);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch budgets" });
   }
 });
 
