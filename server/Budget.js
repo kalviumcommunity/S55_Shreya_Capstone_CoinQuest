@@ -1,25 +1,14 @@
-const mongoose = require('mongoose');
+// server/Budget.js
+const mongoose = require("mongoose");
 
-const budgetSchema = new mongoose.Schema({
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true
-    },
-    amount: {
-        type: Number,
-        required: true
-    },
-    month: {
-        type: String,
-        required: true
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    }
+const BudgetSchema = new mongoose.Schema({
+  category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  month: { type: Number, required: true }, // 0 = Jan, 11 = Dec
+  year: { type: Number, required: true },
+  amount: { type: Number, required: true },
 });
 
-const Budget = mongoose.model('Budget', budgetSchema);
-module.exports = Budget;
+BudgetSchema.index({ user: 1, category: 1, month: 1, year: 1 }, { unique: true });
+
+module.exports = mongoose.model("Budget", BudgetSchema);
