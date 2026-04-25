@@ -1,13 +1,9 @@
-// client/src/components/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Dashboard.css";
 import AddEntryModal from "./AddEntryModal";
-import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo_coint.png";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [entries, setEntries] = useState([]);
   const [budgets, setBudgets] = useState([]);
@@ -17,107 +13,73 @@ const Dashboard = () => {
   const token = localStorage.getItem("token");
 
   const fetchData = async () => {
-    try {
-      const headers = { Authorization: `Bearer ${token}` };
+    const headers = { Authorization: `Bearer ${token}` };
 
-      const [catRes, entryRes, budgetRes] = await Promise.all([
-        axios.get("http://localhost:3000/categories", { headers }),
-        axios.get("http://localhost:3000/entries", { headers }),
-        axios.get("http://localhost:3000/budgets", { headers }),
-      ]);
+    const [catRes, entryRes, budgetRes] = await Promise.all([
+      axios.get("http://localhost:3000/categories", { headers }),
+      axios.get("http://localhost:3000/entries", { headers }),
+      axios.get("http://localhost:3000/budgets", { headers }),
+    ]);
 
-      setCategories(catRes.data);
-      setEntries(entryRes.data);
-      setBudgets(budgetRes.data);
-    } catch (err) {
-      console.error("Dashboard fetch error:", err);
-      navigate("/login");
-    }
+    setCategories(catRes.data);
+    setEntries(entryRes.data);
+    setBudgets(budgetRes.data);
   };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const handleAddClick = (categoryId) => {
-    setSelectedCategoryId(categoryId);
-    setShowModal(true);
-  };
+  const getEntries = (id) => entries.filter((e) => e.category === id);
 
-  const handleModalClose = () => {
-    setShowModal(false);
-    setSelectedCategoryId(null);
-    fetchData(); // Refresh entries/budgets
-  };
+  const getSpent = (id) =>
+    getEntries(id).reduce((sum, e) => sum + e.amount, 0);
 
-  const getCategoryBudget = (categoryId) => {
-    const now = new Date();
-    const thisMonth = now.getMonth();
-    const thisYear = now.getFullYear();
-    const match = budgets.find(
-      (b) =>
-        b.category === categoryId &&
-        b.month === thisMonth &&
-        b.year === thisYear
-    );
-    return match ? match.amount : 0;
-  };
-
-  const getCategoryEntries = (categoryId) =>
-    entries.filter((entry) => entry.category === categoryId);
-
-  const getTotalSpent = (categoryId) =>
-    getCategoryEntries(categoryId).reduce((sum, e) => sum + e.amount, 0);
-
-  const totalSpentAll = categories.reduce(
-    (sum, cat) => sum + getTotalSpent(cat._id),
-    0
-  );
+  const total = categories.reduce((sum, c) => sum + getSpent(c._id), 0);
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <img src={logo} alt="CoinQuest" className="dashboard-logo" />
-        <h1>Dashboard</h1>
+    <div className="dashboard">
+      <h1>Dashboard</h1>
+
+      <div className="summary-card">
+        <h2>Total Spent</h2>
+        <p>₹{total}</p>
       </div>
 
-      <div className="categories-grid">
+      <div className="grid">
         {categories.map((cat) => (
-          <div className="category-card" key={cat._id}>
-            <h2>{cat.name}</h2>
-            <p>
-              <strong>Budget:</strong> ₹{getCategoryBudget(cat._id)}
-            </p>
-            <p>
-              <strong>Spent:</strong> ₹{getTotalSpent(cat._id)}
-            </p>
+          <div key={cat._id} className="card">
+            <h3>{cat.name}</h3>
 
-            <ul className="entries-list">
-              {getCategoryEntries(cat._id).map((entry) => (
-                <li key={entry._id}>
-                  {entry.title} - ₹{entry.amount}
+            <p>Spent: ₹{getSpent(cat._id)}</p>
+
+            <ul>
+              {getEntries(cat._id).map((e) => (
+                <li key={e._id}>
+                  {e.title} - ₹{e.amount}
                 </li>
               ))}
             </ul>
 
             <button
-              className="add-entry-btn"
-              onClick={() => handleAddClick(cat._id)}
+              onClick={() => {
+                setSelectedCategoryId(cat._id);
+                setShowModal(true);
+              }}
             >
-              + Add Entry
+              + Add
             </button>
           </div>
         ))}
       </div>
 
-      <div className="monthly-summary">
-        <h3>Total Spent This Month: ₹{totalSpentAll}</h3>
-      </div>
-
       {showModal && (
         <AddEntryModal
           categoryId={selectedCategoryId}
-          onClose={handleModalClose}
+          onClose={() => {
+            setShowModal(false);
+            fetchData();
+          }}
         />
       )}
     </div>
