@@ -35,9 +35,7 @@ The main goal of this project is to provide users with a user-friendly and effic
 
 #### Repository Link - https://github.com/kalviumcommunity/S55_Shreya_Capstone_CoinQuest
 
-#### Deployed Link - https://shreya-coinquest.vercel.app/
-
-#### Deployed-backend link - https://s55-shreya-capstone-coinquest.onrender.com
+#### Deployed Link - client-if2fz7qm3-shreyas-projects-7402f9ed.vercel.app
 
 ### Feedback and Contributions
 
