@@ -1,0 +1,17 @@
+.budget-track{
+height:10px;
+background:#1e293b;
+border-radius:999px;
+overflow:hidden;
+margin:16px 0 20px;
+}
+
+.budget-fill{
+height:100%;
+background:linear-gradient(90deg,#10b981,#f59e0b);
+}
+
+.budget-row{
+display:flex;
+justify-content:space-between;
+}

@@ -5,60 +5,39 @@ import "./AddEntryModal.css";
 const AddEntryModal = ({ categoryId, onClose }) => {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
+
+  const token = localStorage.getItem("token");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
 
-    try {
-      await axios.post(
-        "http://localhost:5000/entries",
-        { title, amount, date, category: categoryId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      onClose();
-      window.location.reload(); // Refresh to fetch updated entries
-    } catch (err) {
-      console.error("Failed to add entry:", err);
-    }
+    await axios.post(
+      "http://localhost:3000/entries",
+      { title, amount, category: categoryId },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    onClose();
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="overlay">
       <div className="modal">
         <h3>Add Entry</h3>
+
         <form onSubmit={handleSubmit}>
           <input
-            type="text"
             placeholder="Title"
-            value={title}
             onChange={(e) => setTitle(e.target.value)}
-            required
           />
           <input
             type="number"
             placeholder="Amount"
-            value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            required
           />
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-          <div className="btns">
-            <button type="submit">Add</button>
-            <button type="button" onClick={onClose}>
-              Cancel
-            </button>
-          </div>
+
+          <button type="submit">Add</button>
+          <button onClick={onClose}>Cancel</button>
         </form>
       </div>
     </div>

@@ -1,58 +1,104 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const AuthForm = ({ isLogin }) => {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+const [username,setUsername]=useState("");
+const [password,setPassword]=useState("");
+const [error,setError]=useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const navigate=useNavigate();
 
-    const url = isLogin
-      ? "http://localhost:3000/login"
-      : "http://localhost:3000/register";
+const handleSubmit=async(e)=>{
+e.preventDefault();
+setError("");
 
-    try {
-      const res = await axios.post(url, { name, password });
+try{
 
-      if (isLogin) {
-        localStorage.setItem("token", res.data.token);
-        navigate("/dashboard");
-      } else {
-        alert("Registered successfully! You can now log in.");
-        navigate("/login");
-      }
-    } catch (err) {
-      console.error("Auth error:", err);
-      alert(err.response?.data?.error || "Something went wrong");
-    }
-  };
+const url=isLogin
+? "http://localhost:3000/login"
+: "http://localhost:3000/register";
 
-  return (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <h2>{isLogin ? "Login" : "Register"}</h2>
+const res=await axios.post(
+url,
+{
+username,
+password
+}
+);
 
-      <input
-        type="text"
-        placeholder="Username"
-        required
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+if(isLogin){
+localStorage.setItem("token",res.data.token);
+navigate("/dashboard");
+}
+else{
+alert("Registered successfully");
+navigate("/login");
+}
 
-      <input
-        type="password"
-        placeholder="Password"
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+}
+catch(err){
+setError(
+err.response?.data?.error || "Authentication failed"
+);
+}
+};
 
-      <button type="submit">{isLogin ? "Login" : "Register"}</button>
-    </form>
-  );
+return(
+<div className="hero-container">
+<div className="hero-auth glass">
+
+<form
+onSubmit={handleSubmit}
+className="auth-form"
+>
+
+<h1>
+{isLogin ? "Welcome Back" : "Create Account"}
+</h1>
+
+{error && (
+<p style={{color:"#ef4444"}}>
+{error}
+</p>
+)}
+
+<input
+type="text"
+placeholder="Username"
+value={username}
+onChange={(e)=>setUsername(e.target.value)}
+required
+/>
+
+<input
+type="password"
+placeholder="Password"
+value={password}
+onChange={(e)=>setPassword(e.target.value)}
+required
+/>
+
+<button type="submit">
+{isLogin ? "Login" : "Register"}
+</button>
+
+<p>
+{
+isLogin
+?
+<>New here? <Link to="/register">Register</Link></>
+:
+<>Already have account? <Link to="/login">Login</Link></>
+}
+</p>
+
+</form>
+
+</div>
+</div>
+)
+
 };
 
 export default AuthForm;

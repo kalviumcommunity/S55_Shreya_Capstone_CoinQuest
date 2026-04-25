@@ -1,37 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import AuthForm from './AuthForm';
-import BG1 from '../assets/BG1.jpg';
-// import BG2 from '../assets/BG2.jpg'; // ❌ removing this
-import BG3 from '../assets/BG3.jpg';
-import BG4 from '../assets/BG4.jpg';
-import BG5 from '../assets/BG5.jpg';
+import React from "react";
+import {Link} from "react-router-dom";
 
-const images = [BG1, BG3, BG4, BG5]; // ✅ updated array
+const HeroSection=()=>{
 
-const HeroSection = () => {
-  const [currentImage, setCurrentImage] = useState(0);
+return(
+<section className="hero-container">
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 4000);
+<div className="hero-content glass">
 
-    return () => clearInterval(interval);
-  }, []);
+<h1>
+Level Up Your Money Game
+</h1>
 
-  return (
-    <div
-      className="hero-slideshow"
-      style={{
-        backgroundImage: `url(${images[currentImage]})`,
-      }}
-    >
-      <div className="hero-overlay">
-        <AuthForm />
-        <div className="scroll-down-indicator">↓</div>
-      </div>
-    </div>
-  );
-};
+<p>
+Track expenses, set budgets and conquer your finances.
+</p>
+
+<div style={{
+display:"flex",
+gap:"14px",
+justifyContent:"center",
+marginTop:"25px"
+}}>
+
+<Link to="/register">
+<button className="register-btn">
+Start Free
+</button>
+</Link>
+
+<Link to="/login">
+<button
+style={{
+padding:"12px 20px",
+borderRadius:"12px"
+}}
+>
+Login
+</button>
+</Link>
+
+</div>
+
+</div>
+
+</section>
+)
+
+}
 
 export default HeroSection;
