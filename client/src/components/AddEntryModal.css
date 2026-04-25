@@ -1,25 +1,45 @@
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(2,6,23,.72);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:2000;
 }
 
-.modal {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 10px;
+.modal{
+width:420px;
+padding:35px;
 }
 
-.modal input {
-  display: block;
-  margin-bottom: 10px;
-  padding: 8px;
-  width: 100%;
+.modal h2{
+margin-bottom:20px;
 }
 
-.modal button {
-  margin-right: 10px;
+.modal input{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+background:#0f172a;
+color:white;
+border-radius:12px;
+}
+
+.modal-actions{
+display:flex;
+gap:12px;
+margin-top:15px;
+}
+
+.modal-actions button{
+flex:1;
+padding:12px;
+border-radius:12px;
+background:#10b981;
+color:white;
+}
+
+.cancel-btn{
+background:#1e293b !important;
 }

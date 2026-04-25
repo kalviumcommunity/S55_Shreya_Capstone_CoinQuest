@@ -1,0 +1,92 @@
+.cq-navbar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:24px 60px;
+background:rgba(2,6,23,.55);
+backdrop-filter:blur(16px);
+border-bottom:1px solid rgba(255,255,255,.06);
+z-index:1000;
+}
+
+.brand-logo{
+font-size:1.6rem;
+font-weight:700;
+font-family:'Space Grotesk',sans-serif;
+color:#10b981;
+}
+
+.nav-links{
+display:flex;
+align-items:center;
+gap:26px;
+}
+
+.nav-links a{
+color:#cbd5e1;
+font-weight:500;
+}
+
+.nav-links a:hover{
+color:white;
+}
+
+.register-btn{
+background:linear-gradient(135deg,#10b981,#059669);
+padding:12px 20px;
+border-radius:12px;
+color:white !important;
+}
+
+.about-section{
+padding:120px 30px;
+}
+
+.about-wrapper{
+max-width:1200px;
+margin:auto;
+}
+
+.section-title{
+font-size:3rem;
+margin-bottom:16px;
+text-align:center;
+}
+
+.section-subtitle{
+text-align:center;
+color:#94a3b8;
+margin-bottom:60px;
+}
+
+.about-cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:24px;
+}
+
+.about-card{
+padding:35px;
+}
+
+.about-card h3{
+margin-bottom:15px;
+}
+
+.about-card p{
+color:#cbd5e1;
+line-height:1.7;
+}
+
+@media(max-width:768px){
+.cq-navbar{
+padding:20px;
+}
+.nav-links{
+gap:14px;
+}
+}

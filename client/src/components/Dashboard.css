@@ -1,32 +1,124 @@
-.dashboard {
-  padding: 20px;
+.dashboard-page{
+padding:40px;
+max-width:1400px;
+margin:auto;
 }
 
-.summary-card {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+.dashboard-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:30px;
+margin-bottom:35px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+.dashboard-header h1{
+font-size:2.4rem;
+font-family:'Space Grotesk',sans-serif;
 }
 
-.card {
-  background: #1e293b;
-  padding: 15px;
-  border-radius: 10px;
+.dashboard-header p{
+color:#94a3b8;
+margin-top:8px;
 }
 
-.card button {
-  margin-top: 10px;
-  background: #6366f1;
-  border: none;
-  padding: 8px;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
+.add-btn{
+background:linear-gradient(135deg,#10b981,#059669);
+padding:14px 24px;
+border-radius:14px;
+color:white;
+font-weight:600;
+}
+
+.summary-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:22px;
+margin-bottom:35px;
+}
+
+.summary-card{
+padding:30px;
+}
+
+.summary-card h4{
+color:#94a3b8;
+margin-bottom:14px;
+}
+
+.summary-card h2{
+font-size:2rem;
+}
+
+.budget-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:24px;
+}
+
+.budget-card{
+padding:28px;
+}
+
+.budget-card h3{
+margin-bottom:18px;
+}
+
+.budget-row{
+display:flex;
+justify-content:space-between;
+margin-bottom:14px;
+}
+
+.progress-track{
+height:10px;
+background:#1e293b;
+border-radius:999px;
+overflow:hidden;
+margin-bottom:22px;
+}
+
+.progress-fill{
+height:100%;
+background:linear-gradient(90deg,#10b981,#f59e0b);
+}
+
+.txn-list{
+list-style:none;
+margin-bottom:20px;
+}
+
+.txn-list li{
+display:flex;
+justify-content:space-between;
+padding:12px 0;
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.category-add{
+width:100%;
+padding:12px;
+border-radius:12px;
+background:#0f172a;
+border:1px solid rgba(16,185,129,.3);
+color:#10b981;
+}
+
+.dashboard-layout{
+display:flex;
+min-height:100vh;
+}
+
+@media(max-width:768px){
+
+.dashboard-header{
+flex-direction:column;
+gap:20px;
+text-align:center;
+}
+
+.dashboard-page{
+padding:20px;
+}
+
 }

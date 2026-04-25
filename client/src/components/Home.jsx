@@ -1,43 +1,56 @@
 import React from "react";
+import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
-import { Link } from "react-router-dom";
 
-const Home = () => {
-  return (
-    <div>
-      <nav className="navbar">
-        <div className="logo">CoinQuest</div>
+const Home=()=>{
+return(
+<div>
 
-        <div className="nav-buttons">
-          <Link to="/dashboard">Dashboard</Link>
-          <a href="#about">About</a>
-        </div>
-      </nav>
+<Navbar/>
 
-      <HeroSection />
+<HeroSection/>
 
-      <div id="about" className="about-section">
-        <h2>About CoinQuest</h2>
+<section id="about" className="about-section">
+<div className="about-wrapper">
 
-        <div className="about-cards">
-          <div className="about-card">
-            <h3>💡 Mission</h3>
-            <p>Track expenses and manage finances easily.</p>
-          </div>
+<h2 className="section-title">
+Why CoinQuest?
+</h2>
 
-          <div className="about-card">
-            <h3>👩‍💻 Developer</h3>
-            <p>Built by Shreya Pawar as a full-stack project.</p>
-          </div>
+<p className="section-subtitle">
+Personal finance tracking with modern budgeting intelligence.
+</p>
 
-          <div className="about-card">
-            <h3>📬 Contact</h3>
-            <p>Email & social links here.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+<div className="about-cards">
+
+<div className="about-card glass">
+<h3>Smart Budgeting</h3>
+<p>
+Track categories, monitor progress and control overspending.
+</p>
+</div>
+
+<div className="about-card glass">
+<h3>Clean Analytics</h3>
+<p>
+Visual insights, spending patterns and monthly summaries.
+</p>
+</div>
+
+<div className="about-card glass">
+<h3>Built for Students</h3>
+<p>
+Simple personal finance tool designed for real everyday use.
+</p>
+</div>
+
+</div>
+
+</div>
+</section>
+
+</div>
+)
+}
 
 export default Home;

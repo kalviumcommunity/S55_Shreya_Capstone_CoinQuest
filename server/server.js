@@ -1,10 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+require("dotenv").config();
+console.log(process.env.SECRET_KEY);
 const dotenv = require("dotenv");
 const cors = require("cors");
 const Routes = require("./Routes");
 
-dotenv.config();
 
 const app = express();
 app.use(cors());
